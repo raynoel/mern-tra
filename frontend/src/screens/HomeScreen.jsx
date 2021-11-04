@@ -1,10 +1,20 @@
-// MainSection affichant les produits en vente dans la page principale. Chaque produit dans une carte (photo, nom, rating, prix, num reviews)
-import React from 'react'
+// MainSection dans la page principale affichant les produits en vente. Chaque produit dans une carte (photo, nom, rating, prix, num reviews)
+import React, { useState, useEffect } from 'react'
 import { Row, Col } from 'react-bootstrap'
-import products from '../products.js'
 import Product from '../components/Product.jsx'
+import axios from 'axios'
 
 const HomeScreen = () => {
+  const [ products, setProducts ] = useState([]);
+
+  useEffect(() => {                                   // obtient la liste des produits quand la page load
+    const fetchProducts = async () => {
+      const { data } = await axios.get('/api/products');
+      setProducts(data);
+    }
+    fetchProducts()
+  }, [])
+
   return (
     <div>
       <h1>Latest Products</h1>
