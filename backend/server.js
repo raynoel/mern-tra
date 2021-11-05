@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import colors from 'colors'                                   // permet d'ajouter des couleurs au textes de la console
 import connectDB from './config/db.js'
 import products from './data/products.js'
 
