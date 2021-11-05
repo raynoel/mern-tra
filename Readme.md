@@ -6,3 +6,10 @@
 
 # Démarre le frontend
 >>> npm run client
+
+
+
+##########################
+# Mongo DB
+Pour se connecter au site => l: raynoel@gmail.com p: jwq5h7jwq
+Pouir se connecter à la DB => l: ray p: jwq5h7jwq
