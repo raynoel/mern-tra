@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import colors from 'colors'                                   // permet d'ajouter des couleurs au textes de la console
 
 const connectDB = async () => {
   try {
@@ -10,7 +11,7 @@ const connectDB = async () => {
     })
     console.log(`MongoDB Connected: ${conn.connection.host}`.cyan.underline)
   } catch (error) {
-    console.error(`Error: ${error.message}`.red.underline.bold);
+    console.error(`Erreur de connection à MongoDB: ${error.message}`.red.underline.bold);
     process.exit(1);                                          // termine la commande (1 = error)
   }
 }
