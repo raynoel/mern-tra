@@ -1,8 +1,11 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'                                         // permet de faire des action sur le store async
 import { composeWithDevTools } from 'redux-devtools-extension'
+import { productListReducer } from './reducers/productReducers'
 
-const reducer = combineReducers({})
+const reducer = combineReducers({
+  productList: productListReducer,
+})
 
 const initialState = {}
 
