@@ -2,21 +2,22 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col } from "react-bootstrap"
 import Product from "../components/Product.jsx"
+import Loader from "../components/Loader.jsx";
+import Message from "../components/Message.jsx";
 import { listProducts } from '../actions/productActions.js'
 
 const HomeScreen = () => {
   const dispatch = useDispatch()
-  
   const { loading, error, products } = useSelector(state => state.productList)
 
   useEffect(() => {
-    dispatch(listProducts())                                  // Exécute 'listProducts()' lorsque la page load
+    dispatch(listProducts())                                  // 'listProducts()' de productActions.js obtient 'products', 'loading' et 'error'
   }, [dispatch])
 
   return (
     <>
       <h1>Latest Products</h1>
-      { loading ? <h2>Loading...</h2> : error ? <h3>{ error }</h3> : ( 
+      { loading ? <Loader /> : error ? <Message variant='danger'>{ error }</Message> : ( 
         <Row>
           {products.map((product) => (
             <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
