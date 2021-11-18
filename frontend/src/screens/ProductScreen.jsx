@@ -8,7 +8,7 @@ import Message from '../components/Message.jsx'
 import { listProductDetails } from '../actions/productActions'
 
 const ProductScreen = ({ history, match }) => {                                    // match === param du URL
-  const [qty, setQty] = useState(0)
+  const [qty, setQty] = useState(1)
   const dispatch = useDispatch()                                          // useDispatch() retourne une ref à store.dispatch()
   const { loading, error, product } = useSelector((state => state.productDetails)) // useSelector is a function that takes the current state as an argument and returns whatever data you want from it.
 
