@@ -2,6 +2,8 @@ import asyncHandler from "express-async-handler";
 import User from '../models/userModel.js'                               // middleware qui catch les erreurs, on peut alors omettre try-catch
 import generateToken from "../routes/utils/generateToken.js";
 
+
+
 // @desc    Auth user & get token
 // @route   POST /api/users/login
 // @access  public
@@ -23,8 +25,9 @@ const authUser = asyncHandler(async (req, res) => {
 })
 
 
+
 // @desc    Enregistre un nouvel usagé
-// @route   POST /api/users
+// @route   POST /api/users/
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body
@@ -32,7 +35,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (userExists) {
     res.status(400)
     throw new Error('User already exists')
-  }
+  } 
   const user = await User.create({ name, email, password })
   if (user) {
     res.status(201).json({
@@ -47,6 +50,8 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('Invalid user data')
   }
 })
+
+
 
 // @desc    Obtient le profil de l'usagé
 // @route   GET /api/users/profile
