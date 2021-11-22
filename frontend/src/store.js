@@ -1,3 +1,4 @@
+// Le store est importé dans index.js
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'                                         // permet de faire des action async sur le store
 import { composeWithDevTools } from 'redux-devtools-extension'
