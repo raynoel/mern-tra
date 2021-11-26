@@ -22,13 +22,11 @@ const ProfileScreen = ({ history }) => {
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
+    } else if (!user.name) {
+      dispatch(getUserDetails('profile'))
     } else {
-      if (!user.name) {
-        dispatch(getUserDetails('profile'))
-      } else {
-        setName(user.name)
-        setEmail(user.email)
-      }
+      setName(user.name)
+      setEmail(user.email)
     }
   }, [ dispatch, history, userInfo, user, success ])
 
@@ -38,7 +36,7 @@ const ProfileScreen = ({ history }) => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
     } else {
-      dispatch(updateUserProfile({ id: user._id, name, email, password }))
+      dispatch(updateUserProfile({ id: user._id, name, email, password }))      // update la DB; la DB renvoie les infos; update 'userInfo'
     }
   }
 

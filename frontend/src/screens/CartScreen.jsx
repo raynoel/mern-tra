@@ -11,7 +11,6 @@ const CartScreen = ({ match, location, history }) => {
 
   const dispatch = useDispatch()
   const { cartItems } = useSelector(state => state.cart)
-  console.log(cartItems)
 
   useEffect(() => {
     if (productId) {                                                        // si la page est appelée avec un id dans la url (/cart/id)
@@ -24,7 +23,7 @@ const CartScreen = ({ match, location, history }) => {
   }
 
   const checkoutHandler = () => {
-    history.push('/login/redirect=shipping')
+    history.push('/login?redirect=shipping')
   }
   
   return (

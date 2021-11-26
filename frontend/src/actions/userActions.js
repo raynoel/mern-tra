@@ -58,8 +58,8 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
     dispatch({ type: USER_DETAILS_REQUEST })
     const { userLogin: { userInfo }} = getState()                                     // Déconstruction... si login => obtient userInfo
     const config = { headers: { Authorization: `Bearer ${userInfo.token}` }}
-    const { data } = await axios.get(`/api/users/${id}`, config)                      // Cherche l'usagé dans le DB
-    dispatch({ type: USER_DETAILS_SUCCESS, payload: data })
+    const { data } = await axios.get(`/api/users/${id}`, config)                      // Obtient de la DB {_id, name, email, isAdmin}
+    dispatch({ type: USER_DETAILS_SUCCESS, payload: data })                           // Set  {user}
   } catch (error) {
     dispatch({
       type: USER_DETAILS_FAIL,
@@ -73,10 +73,10 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
 export const updateUserProfile = (user) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_UPDATE_PROFILE_REQUEST })
-    // const { userLogin: { userInfo }} = getState()                                     // Déconstruction... si login => obtient userInfo
-    // const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${userInfo.token}` }}
-    // const { data } = await axios.put(`/api/users/profile`, user, config)              // Modifie l'usagé dans la DB et retourne data: {_id, name, email, isAdmin, token}
-    // dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data })
+    const { userLogin: { userInfo }} = getState()                                     // Déconstruction... si login => obtient userInfo
+    const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${userInfo.token}` }}
+    const { data } = await axios.put(`/api/users/profile`, user, config)              // Modifie l'usagé dans la DB; retourne {_id, name, email, isAdmin, token}
+    dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data })
   } catch (error) {
     dispatch({
       type: USER_UPDATE_PROFILE_FAIL,

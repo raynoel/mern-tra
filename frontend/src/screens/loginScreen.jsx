@@ -12,9 +12,9 @@ const LoginScreen = ({ location, history }) => {
   const [ password, setPassword ] = useState('')                                // un state password pour le champ password
   const dispatch = useDispatch()                                                // pour modifier le store redux
   const { loading, error, userInfo } = useSelector((state) => state.userLogin)  // extrait login, error, userInfo de store
-  const redirect = location.search ? location.search.split('=')[1] : '/'
+  const redirect = location.search ? location.search.split('=')[1] : '/'        // Extrait le 'redirect=shipping' du URL
 
-  // Redirige l'usagé si ses infos sont dans store.js (puisé dans le localStorage)
+  // Redirige l'usagé si 'userInfo' est dans le store
   useEffect(() => {
       if (userInfo) { history.push(redirect) }
   }, [history, userInfo, redirect] )
