@@ -5,10 +5,12 @@ import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message.jsx'
 import CheckoutSteps from '../components/CheckoutSteps.jsx'
+import { createOrder } from '../actions/orderActions'
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch()
   const cart = useSelector((state) => state.cart)                               // Obtient cart du store
+  const { order, success, error } = useSelector((state) => state.orderCreate)   // Obtient orderCreate du store
 
   if (!cart.shippingAddress.address) {
     history.push('/shipping')
@@ -24,8 +26,25 @@ const PlaceOrderScreen = ({ history }) => {
   cart.taxPrice       = Number(addDecimals(0.15 * cart.itemsPrice))
   cart.totalPrice     = Number(addDecimals(cart.itemsPrice + cart.shippingPrice + cart.taxPrice))
 
-  
-  const placeOrderHandler = () => {  }
+  useEffect(() => {
+    if (success) {
+      history.push(`/order/${order._id}`)
+    }
+    // eslint-disable-next-line
+  }, [history, success])
+
+  const placeOrderHandler = () => {
+    dispatch( createOrder({
+        orderItems:       cart.cartItems,
+        shippingAddress:  cart.shippingAddress,
+        paymentMethod:    cart.paymentMethod,
+        itemsPrice:       cart.itemsPrice,
+        shippingPrice:    cart.shippingPrice,
+        taxPrice:         cart.taxPrice,
+        totalPrice:       cart.totalPrice,
+      })
+    )
+  }
 
   return (
     <>
@@ -103,7 +122,7 @@ const PlaceOrderScreen = ({ history }) => {
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item> 
-                {/* {error && <Message variant='danger'>{error}</Message>}  */}
+                {error && <Message variant='danger'>{error}</Message>} 
               </ListGroup.Item>
               <ListGroup.Item>
                 <Button type='button' className='btn-block' disabled={cart.cartItems === 0} onClick={placeOrderHandler}> Place Order </Button>
