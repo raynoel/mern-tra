@@ -4,6 +4,7 @@ import connectDB from './config/db.js'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
+import orderRoutes from './routes/orderRoutes.js'
 
 dotenv.config();                                              // Active dotenv
 
@@ -18,6 +19,7 @@ app.use(express.json())                                       // accepte JSON da
 app.get('/', (req, res) => { res.send('API is running...') })
 app.use('/api/products', productRoutes)                       // Redirige 'api/products/' et 'api/products/:id' à "/routes/productRoutes.js"
 app.use('/api/users', userRoutes)
+app.use('/api/orders', orderRoutes)
 
 // Keep this as a last routes
 app.use(notFound)                                           // middleware gestion des 404 
