@@ -84,3 +84,12 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     })
   }
 }
+
+
+export const savePaymentMethod = (paymentMethod) => (dispatch) => {
+  try {
+    
+  } catch (error) {
+    
+  }
+}
