@@ -1,17 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import { PayPalButton } from "react-paypal-button-v2";                                 // Offre des boutons PayPal et CC
 import { Link } from 'react-router-dom'
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message.jsx'
 import Loader from '../components/Loader.jsx'
-import { getOrderDetails } from '../actions/orderActions'
+import { getOrderDetails, payOrder } from '../actions/orderActions'
+import { ORDER_PAY_RESET } from '../constants/orderConstants'
 
 
 
 const OrderScreen = ({ match }) => {
   const orderId = match.params.id                               
   const dispatch = useDispatch()
+  const [sdkReady, setSdkReady] = useState(false)                               // Variable pour vérifier si SDK Script PayPal à été ajouté au HTML 
+
   const { order, loading, error } = useSelector((state) => state.orderDetails)
+  const { loading: loadingPay, success: successPay } = useSelector((state) => state.orderPay) // Vérifie si la commande est payée
 
   const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2)         // Arrondi un nb à 2 dédimales (ex. "33.00")
   
@@ -21,10 +27,40 @@ const OrderScreen = ({ match }) => {
   }
 
   useEffect(() => {
-    dispatch(getOrderDetails(orderId))
-  }, [ dispatch, orderId ])
+    // fct pour ajouter le Script SDK PayPal '<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>' à la fin de la page
+    const addPayPalScript = async () => {                      
+      const { data: clientId } = await axios.get('/api/config/paypal')          // Obtient PAYPAL_CLIENT_ID 
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+      script.async = true
+      script.onload = () => { setSdkReady(true) }                               // Set 'sdkReady' = true
+      document.body.appendChild(script)                         
+    }
+
+    if (!order || successPay) {                                                 // Si payé
+      dispatch({ type: ORDER_PAY_RESET })                                       // Efface les infos de 'orderPay: {}' du store
+      dispatch(getOrderDetails(orderId))                                        // Rafraichi les données
+    } else if (!order.isPaid) {                                                 // Si pas payé
+      if (!window.paypal) {                                                     // Si le script SDK PayPal absent
+        addPayPalScript()                                                       // Ajouter le script SDK PayPal
+      } else {
+        setSdkReady(true)                                                       // Set 'sdkReady' = true
+      }
+    }
+
+  }, [ dispatch, orderId, successPay, order ])
 
   
+
+  // Gère la réponse de réception de payment de PayPal
+  const successPaymentHandler = (paymentResult) => {
+    // console.log(paymentResult)
+    dispatch(payOrder(orderId, paymentResult))                                  // Marque la commande payée
+  }
+
+
+
   return loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) : (
     <>
       <h1 style={{textAlign: "center"}}>Order Status</h1>
@@ -41,11 +77,13 @@ const OrderScreen = ({ match }) => {
               <p><strong>Name: </strong> {order.user.name}</p>
               <p><strong>Email: </strong>{' '}<a href={`mailto:${order.user.email}`}>{order.user.email}</a></p>
               <p><strong>Address:</strong>{' '}{order.shippingAddress.address}, {order.shippingAddress.city}{' '}{order.shippingAddress.postalCode},{' '}{order.shippingAddress.country}</p>
+              {order.isDelivered ? ( <Message variant='success'> Delivered on {order.deliveredAt} </Message> ) : ( <Message variant='danger'>Not Delivered</Message> )}
             </ListGroup.Item>
 
             <ListGroup.Item>
               <h2>Payment Method</h2>
               <p><strong>Method: </strong>{order.paymentMethod}</p>
+              {order.isPaid ? ( <Message variant='success'>Paid on {order.paidAt}</Message> ) : ( <Message variant='danger'>Not Paid</Message> )}
             </ListGroup.Item>
 
             <ListGroup.Item>
@@ -72,30 +110,45 @@ const OrderScreen = ({ match }) => {
           <Card>
             <ListGroup variant='flush'>
               <ListGroup.Item><h2>Order Summary</h2></ListGroup.Item>
+
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
                   <Col>${order.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
+
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
                   <Col>${addDecimals(order.shippingPrice)}</Col>
                 </Row>
               </ListGroup.Item>
+
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
                   <Col>${order.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
+
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+
+              {/* si non-payé, affiche un spinner et les boutons PayPal */}
+              {!order.isPaid && (
+                <ListGroup.Item> 
+                  {loadingPay && <Loader />} 
+                  {!sdkReady ? <Loader /> : (
+                    <PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler} /> 
+                  )}
+                </ListGroup.Item>)
+              }
+
             </ListGroup>
           </Card>
         </Col>
