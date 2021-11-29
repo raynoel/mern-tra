@@ -53,10 +53,9 @@ const registerNewUser = asyncHandler(async (req, res) => {
 
 
 
-// @desc    Obtient le profil de l'usagé
+// @desc    Retourne le profil de l'usagé
 // @route   GET /api/users/profile
 // @access  Private
-// Le middleware 'protect' est appliqué dans userRoutes 
 const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id)
   if (user) {
@@ -130,4 +129,43 @@ const deleteUser = asyncHandler(async (req, res) => {
 })
 
 
-export { registerNewUser, authUser, getUserProfile, updateUserProfile, getUsers, deleteUser }
+
+// @desc    Obtient un usagé par son ID
+// @route   GET /api/users/:id
+// @access  Admin
+const getUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).select('-password')
+  if (user) {
+    res.json(user)
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+
+
+
+// @desc    Modifie un usagé (les modif sont passées via un obj JSON)
+// @route   PUT /api/users/:id
+// @access  Admin
+const updateUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id)
+  if (user) {
+    user.name = req.body.name || user.name
+    user.email = req.body.email || user.email
+    user.isAdmin = req.body.isAdmin || user.isAdmin
+    const updatedUser = await user.save()
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    })
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+
+
+export { registerNewUser, authUser, getUserProfile, updateUserProfile, getUsers, deleteUser, getUserById, updateUser }
