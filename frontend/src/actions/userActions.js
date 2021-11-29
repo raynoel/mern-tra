@@ -4,6 +4,7 @@ import {
   USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL,
   USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_RESET,
   USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_RESET,
+  USER_LIST_REQUEST, USER_LIST_SUCCESS, USER_LIST_FAIL, USER_LIST_RESET,
 } from '../constants/userConstants'
 import { ORDER_LIST_MY_RESET } from '../constants/orderConstants'
 
@@ -53,6 +54,7 @@ export const register = (name, email, password) => async (dispatch) => {
 }
 
 
+
 // fct pour importer les infos de l'usagé dans la page "ProfileScreen.jsx"
 // store: userDetails: { user: { _id, name, email, isAdmin }}
 export const getUserDetails = (id) => async (dispatch, getState) => {
@@ -88,10 +90,20 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 }
 
 
-export const savePaymentMethod = (paymentMethod) => (dispatch) => {
+// Admin - Obtient la liste des usagés de la DB et l'enregistre dans le store sous { userList: users }
+export const listUsers = () => async (dispatch, getState) => {
   try {
-    
+    dispatch({ type: USER_LIST_REQUEST })
+    const { userLogin: { userInfo }} = getState()
+    const config = { headers: { Authorization: `Bearer ${userInfo.token}` }}
+    const { data } = await axios.get(`/api/users`, config)
+    dispatch({ type: USER_LIST_SUCCESS, payload: data })                            // Envoie la liste au réducer, qui l'enregistre dans le store
   } catch (error) {
-    
+    dispatch({
+      type: USER_LIST_FAIL,
+      payload: error.response && error.response.data.message ? error.response.data.message : error.message
+    })
   }
 }
+
+

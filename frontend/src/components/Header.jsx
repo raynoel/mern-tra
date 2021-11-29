@@ -22,7 +22,7 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className='ml-auto'>
               <LinkContainer to='/cart'><Nav.Link><i className='fa fa-shopping-cart'></i> Cart</Nav.Link></LinkContainer>
-              {/* Si login, affiche le nom du visiteur et drop-down affiche 'profile' & 'logout' */}
+              {/* Si login, affiche le nom du visiteur + drop-down qui affiche 'profile' & 'logout' */}
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id='username'>
                   <LinkContainer to='/profile'><NavDropdown.Item>Profile</NavDropdown.Item></LinkContainer>
