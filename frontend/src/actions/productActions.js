@@ -5,12 +5,12 @@ import {
 } from "../constants/productConstants"
 
 
-// Série d'actions à exécuter lors de l'appel => dispatch(listProducts)
+// Obtient la liste des produits de la DB et l'enregistre dans le store sous {productList: products}
 export const listProducts = () => async (dispatch) => {
   try {
-    dispatch({ type: PRODUCT_LIST_REQUEST })                                  // Exécute PRODUCT_LIST_REQUEST défini dans les reducers
-    const { data } = await axios.get('/api/products')                         // Obtient la liste des produits de MongoDB
-    dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data })                   // Exécute PRODUCT_LIST_SUCCESS défini dans les reducers
+    dispatch({ type: PRODUCT_LIST_REQUEST })
+    const { data } = await axios.get('/api/products')                             // Obtient la liste de MongoDB
+    dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data })                       // enregistre la liste dans le store
   } catch (error) {
     dispatch({ 
       type: PRODUCT_LIST_FAIL, 
@@ -19,12 +19,12 @@ export const listProducts = () => async (dispatch) => {
   }
 }
 
-// Série d'actions à exécuter lors de l'appel => dispatch(listProductDetails)
+// Obtient un produit par sont ID de la DB et l'enregistre dans le store sous {productDetails: product}
 export const listProductDetails = (id) => async (dispatch) => {
   try {
-    dispatch({ type: PRODUCT_DETAILS_REQUEST })                                   // Exécute PRODUCT_DETAILS_REQUEST défini dans les reducers
+    dispatch({ type: PRODUCT_DETAILS_REQUEST })
     const { data } = await axios.get(`/api/products/${id}`)                       // Obtient le produit de MongoDB
-    dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data })                    // Exécute PRODUCT_DETAILS_SUCCESS défini dans les reducers
+    dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data })                    // enregistre le produit dans le store
   } catch (error) {
     dispatch({ 
       type: PRODUCT_DETAILS_FAIL, 
