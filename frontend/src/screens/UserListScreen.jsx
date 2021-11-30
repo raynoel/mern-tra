@@ -11,9 +11,9 @@ const UserListScreen = ({ history }) => {
 
   const { loading, error, users }   = useSelector((state) => state.userList)
   const { userInfo }                = useSelector((state) => state.userLogin)
-  const{ success: successDelete }   = useSelector((state) => state.userDelete)
+  const { success: successDelete }  = useSelector((state) => state.userDelete)
   
-  
+
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listUsers())
@@ -39,7 +39,7 @@ const UserListScreen = ({ history }) => {
               <th>ID</th>
               <th>NAME</th>
               <th>EMAIL</th>
-              <th>ADMIN</th>
+              <th className='text-center'>ADMIN</th>
               <th></th>
             </tr>
           </thead>
@@ -49,13 +49,13 @@ const UserListScreen = ({ history }) => {
                 <td>{user._id}</td>
                 <td>{user.name}</td>
                 <td><a href={`mailto:${user.email}`}>{user.email}</a></td>
-                <td>{user.isAdmin ? ( <i className='fa fa-check' style={{ color: 'green' }}></i> ) : ( <i className='fa fa-times' style={{ color: 'red' }}></i> )}</td>
-                <td>
+                <td className='text-center'>{user.isAdmin ? ( <i className='fa fa-check' style={{ color: 'green' }}></i> ) : ( <i className='fa fa-times' style={{ color: 'red' }}></i> )}</td>
+                <td className='text-center'>
                   <LinkContainer to={`/admin/user/${user._id}/edit`}>
-                    <Button variant='light' className='btn-sm' ><i className='fa fa-edit' title="Edit"></i></Button>
+                    <Button variant='light' className='btn-sm'><i className='fa fa-edit' title="Edit"></i></Button>
                   </LinkContainer>
-                  <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(user._id)}><i className='fa fa-trash' title="Delete"></i></Button>
                 </td>
+                <td className='text-center'><Button variant='danger' className='btn-sm' onClick={() => deleteHandler(user._id)}><i className='fa fa-trash' title="Delete"></i></Button></td>
               </tr>
             ))}
           </tbody>
