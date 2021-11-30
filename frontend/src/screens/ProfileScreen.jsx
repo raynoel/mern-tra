@@ -6,6 +6,7 @@ import Message from '../components/Message.jsx'
 import Loader from '../components/Loader.jsx'
 import { getUserDetails, updateUserProfile } from '../actions/userActions'
 import { listMyOrders } from '../actions/orderActions'
+import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
 
 
 
@@ -26,7 +27,8 @@ const ProfileScreen = ({ history }) => {
     if (!userInfo) {
       history.push('/login')
     } else { 
-      if (!user.name) {
+      if (!user || !user.name || success) {
+        dispatch({ type: USER_UPDATE_PROFILE_RESET })                                              // supprime l'ancien profil
         dispatch(getUserDetails('profile'))
         dispatch(listMyOrders())                                                                    // Obtient la liste des commandes du visiteur et l'enregistre dans le store sous orderListMy: orders
       } else {

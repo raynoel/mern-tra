@@ -2,14 +2,15 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'                                         // permet de faire des action async sur le store
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { productListReducer, productDetailsReducer } from './reducers/productReducers'
 import { cartReducer } from './reducers/cartReducers'
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer, userListReducer, userDeleteReducer, userUpdateReducer } from './reducers/userReducers'
+import { productListReducer, productDetailsReducer, productDeleteReducer } from './reducers/productReducers'
 import { orderCreateReducer, orderDetailsReducer, orderPayReducer, orderListMyReducer } from './reducers/orderReducers'
 
 const reducer = combineReducers({
-  productList:    productListReducer,
   productDetails: productDetailsReducer,
+  productList:    productListReducer,
+  productDelete:  productDeleteReducer,
   cart:           cartReducer,
   userRegister:   userRegisterReducer,
   userLogin:      userLoginReducer,
