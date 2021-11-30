@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message.jsx'
 import Loader from '../components/Loader.jsx'
 import FormContainer from '../components/FormContainer.jsx'
-import { getUserDetails } from '../actions/userActions'
+import { getUserDetails, updateUser } from '../actions/userActions'
 
 
 
@@ -13,26 +13,31 @@ const UserEditScreen = ({ match, history }) => {
   const userId = match.params.id
 
   const dispatch = useDispatch()
-
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [isAdmin, setIsAdmin] = useState(false)
 
   const { loading, error, user } = useSelector((state) => state.userDetails)
-  
+  const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = useSelector((state) => state.userUpdate)
+
   useEffect(() => {
-    if (!user.name || user._id !== userId) {
-      dispatch(getUserDetails(userId))
+    if (successUpdate) {
+      history.push('/admin/userlist')
     } else {
-      setName(user.name)
-      setEmail(user.email)
-      setIsAdmin(user.isAdmin)
+      if (!user.name || user._id !== userId) {
+        dispatch(getUserDetails(userId))
+      } else {
+        setName(user.name)
+        setEmail(user.email)
+        setIsAdmin(user.isAdmin)
+      }
     }
-  }, [dispatch, history, userId, user])
+  }, [dispatch, history, userId, user, successUpdate])
+
 
   const submitHandler = (e) => {
     e.preventDefault()
-    // DISPATCH updateUser({ _id: userId, name, email, isAdmin })
+    dispatch(updateUser({ _id: userId, name, email, isAdmin }))
   }
 
   return (
@@ -41,6 +46,8 @@ const UserEditScreen = ({ match, history }) => {
 
       <FormContainer>
         <h1>Edit User</h1>
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
         {loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) : (
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='name'>

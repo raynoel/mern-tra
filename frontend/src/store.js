@@ -4,7 +4,7 @@ import thunk from 'redux-thunk'                                         // perme
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { productListReducer, productDetailsReducer } from './reducers/productReducers'
 import { cartReducer } from './reducers/cartReducers'
-import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer, userListReducer, userDeleteReducer } from './reducers/userReducers'
+import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer, userListReducer, userDeleteReducer, userUpdateReducer } from './reducers/userReducers'
 import { orderCreateReducer, orderDetailsReducer, orderPayReducer, orderListMyReducer } from './reducers/orderReducers'
 
 const reducer = combineReducers({
@@ -14,9 +14,10 @@ const reducer = combineReducers({
   userRegister:   userRegisterReducer,
   userLogin:      userLoginReducer,
   userDetails:    userDetailsReducer,
-  userUpdateProfile: userUpdateProfileReducer,
-  userDelete:     userDeleteReducer,
   userList:       userListReducer,
+  userUpdateProfile: userUpdateProfileReducer,
+  userUpdate:     userUpdateReducer,
+  userDelete:     userDeleteReducer,
   orderCreate:    orderCreateReducer,
   orderDetails:   orderDetailsReducer,
   orderPay:       orderPayReducer,
