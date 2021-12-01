@@ -1,13 +1,14 @@
 // Le store est importé dans index.js
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'                                         // permet de faire des action async sur le store
-import { composeWithDevTools } from 'redux-devtools-extension'
+import { composeWithDevTools } from 'redux-devtools-extension'          // permet d'utiliser le devtool Redux dans Chrome
 import { cartReducer } from './reducers/cartReducers'
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer, userListReducer, userDeleteReducer, userUpdateReducer } from './reducers/userReducers'
-import { productListReducer, productDetailsReducer, productDeleteReducer } from './reducers/productReducers'
+import { productListReducer, productDetailsReducer, productDeleteReducer, productCreateReducer } from './reducers/productReducers'
 import { orderCreateReducer, orderDetailsReducer, orderPayReducer, orderListMyReducer } from './reducers/orderReducers'
 
 const reducer = combineReducers({
+  productCreate:  productCreateReducer,
   productDetails: productDetailsReducer,
   productList:    productListReducer,
   productDelete:  productDeleteReducer,
