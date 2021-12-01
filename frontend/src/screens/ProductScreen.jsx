@@ -5,7 +5,7 @@ import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 import Rating from '../components/Rating.jsx'
 import Loader from '../components/Loader.jsx'
 import Message from '../components/Message.jsx'
-import { listProductDetails } from '../actions/productActions'
+import { getProductDetails } from '../actions/productActions'
 
 const ProductScreen = ({ history, match }) => {                                    // match === param du URL
   const [qty, setQty] = useState(1)
@@ -13,7 +13,7 @@ const ProductScreen = ({ history, match }) => {                                 
   const { loading, error, product } = useSelector((state => state.productDetails)) // useSelector is a function that takes the current state as an argument and returns whatever data you want from it.
 
   useEffect(() => {                                                       // obtient le produit quand la page load ou :id change
-    dispatch(listProductDetails(match.params.id))
+    dispatch(getProductDetails(match.params.id))
   }, [dispatch, match])
 
   const addToCartHandler = () => {

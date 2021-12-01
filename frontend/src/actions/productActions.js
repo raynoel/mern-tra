@@ -22,7 +22,7 @@ export const listProducts = () => async (dispatch) => {
 }
 
 // Obtient un produit par sont ID de la DB et l'enregistre dans le store sous {productDetails: product}
-export const listProductDetails = (id) => async (dispatch) => {
+export const getProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST })
     const { data } = await axios.get(`/api/products/${id}`)                       // Obtient le produit de MongoDB
