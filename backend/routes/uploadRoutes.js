@@ -3,6 +3,7 @@ import express from 'express'
 import multer from 'multer'
 const router = express.Router()
 
+// Ici on utilise la syntaxe de multer. Voir site web pour obtenir un example.
 const storage = multer.diskStorage({
   destination(req, file, cb) {
     cb(null, 'uploads/')
@@ -12,7 +13,7 @@ const storage = multer.diskStorage({
   },
 })
 
-// fct qui vérifie que l'extension est 'jpg|jpeg|png'... retourne true ou le texte 'Images only!'
+// fct qui vérifie si l'extension est 'jpg|jpeg|png'... retourne true ou le texte 'Images only!'
 function checkFileType(file, cb) {
   const filetypes = /jpg|jpeg|png/
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase())
