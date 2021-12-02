@@ -92,4 +92,23 @@ const getOrders = asyncHandler(async (req, res) => {
 
 
 
-export { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders, getOrders }
+
+// @desc    Marque une commande comme étant livrée
+// @route   PUT /api/orders/:id/deliver
+// @access  Admin
+const updateOrderToDelivered = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id)
+  if (order) {
+    order.isDelivered = true
+    order.deliveredAt = Date.now()
+    const updatedOrder = await order.save()                         // Sauvegarde la commande modifiée
+    res.json(updatedOrder)                                          // Retourne la réponse de la DB
+  } else {
+    res.status(404)
+    throw new Error('Order not found')
+  }
+})
+
+
+
+export { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders, getOrders, updateOrderToDelivered }

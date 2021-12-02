@@ -2,23 +2,25 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { PayPalButton } from "react-paypal-button-v2";                                 // Offre des boutons PayPal et CC
 import { Link } from 'react-router-dom'
-import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
+import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message.jsx'
 import Loader from '../components/Loader.jsx'
-import { getOrderDetails, payOrder } from '../actions/orderActions'
-import { ORDER_PAY_RESET } from '../constants/orderConstants'
+import { getOrderDetails, payOrder, deliverOrder } from '../actions/orderActions'
+import { ORDER_PAY_RESET, ORDER_DELIVER_RESET } from '../constants/orderConstants'
 
 
 
-const OrderScreen = ({ match }) => {
+const OrderScreen = ({ match, history }) => {
   const orderId = match.params.id  
                                
   const [sdkReady, setSdkReady] = useState(false)                                     // Variable pour vérifier si SDK Script PayPal à été ajouté au HTML 
   
   const dispatch = useDispatch()
+  const { userInfo }                                 = useSelector((state) => state.userLogin)
   const { order, loading, error }                    = useSelector((state) => state.orderDetails)
   const { loading: loadingPay, success: successPay } = useSelector((state) => state.orderPay) // Vérifie si la commande est payée
+  const { loading: loadingDeliver, success: successDeliver } = useSelector((state) => state.orderDeliver)
 
   const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2)               // Arrondi un nb à 2 dédimales (ex. "33.00")
   
@@ -28,6 +30,9 @@ const OrderScreen = ({ match }) => {
   }
 
   useEffect(() => {
+    if (!userInfo) {
+      history.push('/login')
+    }
     // fct pour ajouter le Script SDK PayPal '<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>' à la fin de la page
     const addPayPalScript = async () => {                      
       const { data: clientId } = await axios.get('/api/config/paypal')          // Obtient PAYPAL_CLIENT_ID 
@@ -39,8 +44,9 @@ const OrderScreen = ({ match }) => {
       document.body.appendChild(script)                         
     }
 
-    if (!order || successPay) {                                                 // Si payé
+    if (!order || successPay || successDeliver) {                               // Si vient juste d'être payée ou livrée
       dispatch({ type: ORDER_PAY_RESET })                                       // Efface les infos de 'orderPay: {}' du store
+      dispatch({ type: ORDER_DELIVER_RESET })
       dispatch(getOrderDetails(orderId))                                        // Rafraichi les données
     } else if (!order.isPaid) {                                                 // Si pas payé
       if (!window.paypal) {                                                     // Si le script SDK PayPal absent
@@ -50,7 +56,7 @@ const OrderScreen = ({ match }) => {
       }
     }
 
-  }, [ dispatch, orderId, successPay, order ])
+  }, [ dispatch, orderId, successPay, successDeliver, order, history, userInfo ])
 
   
 
@@ -60,6 +66,9 @@ const OrderScreen = ({ match }) => {
     dispatch(payOrder(orderId, paymentResult))                                  // Marque la commande payée
   }
 
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order))
+  }
 
 
   return loading ? ( <Loader /> ) : error ? ( <Message variant='danger'>{error}</Message> ) : (
@@ -144,11 +153,16 @@ const OrderScreen = ({ match }) => {
               {!order.isPaid && (
                 <ListGroup.Item> 
                   {loadingPay && <Loader />} 
-                  {!sdkReady ? <Loader /> : (
-                    <PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler} /> 
-                  )}
+                  {!sdkReady ? <Loader /> : ( <PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler} /> )}
                 </ListGroup.Item>)
               }
+
+              {loadingDeliver && <Loader />}
+              {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                <ListGroup.Item>
+                  <Button type='button' className='btn btn-block' onClick={deliverHandler}>Mark As Delivered</Button>
+                </ListGroup.Item>
+              )}
 
             </ListGroup>
           </Card>
