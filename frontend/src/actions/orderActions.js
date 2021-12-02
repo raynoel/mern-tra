@@ -78,8 +78,8 @@ export const listMyOrders = () => async (dispatch, getState) => {
 }
 
 
-// Obtient la liste des commandes contenu dans la DB
-export const listOrders = () => async (dispatch, getState) => {
+// Obtient la liste des commandes 
+export const getOrders = () => async (dispatch, getState) => {
   try {
     dispatch({ type: ORDER_LIST_REQUEST })
     const { userLogin: { userInfo } } = getState()

@@ -12,14 +12,15 @@ import { ORDER_PAY_RESET } from '../constants/orderConstants'
 
 
 const OrderScreen = ({ match }) => {
-  const orderId = match.params.id                               
+  const orderId = match.params.id  
+                               
+  const [sdkReady, setSdkReady] = useState(false)                                     // Variable pour vérifier si SDK Script PayPal à été ajouté au HTML 
+  
   const dispatch = useDispatch()
-  const [sdkReady, setSdkReady] = useState(false)                               // Variable pour vérifier si SDK Script PayPal à été ajouté au HTML 
-
-  const { order, loading, error } = useSelector((state) => state.orderDetails)
+  const { order, loading, error }                    = useSelector((state) => state.orderDetails)
   const { loading: loadingPay, success: successPay } = useSelector((state) => state.orderPay) // Vérifie si la commande est payée
 
-  const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2)         // Arrondi un nb à 2 dédimales (ex. "33.00")
+  const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2)               // Arrondi un nb à 2 dédimales (ex. "33.00")
   
   // Attend d'avoir reçu la commande de la DB pour calculer le coût des items
   if (!loading) {     

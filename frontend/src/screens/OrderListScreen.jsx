@@ -4,7 +4,7 @@ import { Table, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message.jsx'
 import Loader from '../components/Loader.jsx'
-import { listOrders } from '../actions/orderActions'
+import { getOrders } from '../actions/orderActions'
 
 const OrderListScreen = ({ history }) => {
   const dispatch = useDispatch()
@@ -14,7 +14,7 @@ const OrderListScreen = ({ history }) => {
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
-      dispatch(listOrders())
+      dispatch(getOrders())
     } else {
       history.push('/login')
     }
