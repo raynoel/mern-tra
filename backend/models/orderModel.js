@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const orderSchema = mongoose.Schema(
   {
-    user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },        // le client
+    user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },        // le client... identifié par un ID qui le lie au Model 'User'
     orderItems: [                                                                       // liste d'items dans la commande
       {
         name:       { type: String, required: true },
