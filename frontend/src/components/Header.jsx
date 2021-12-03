@@ -5,6 +5,7 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import SearchBox from './SearchBox.jsx';
 import { logout } from '../actions/userActions'
+import "font-awesome/css/font-awesome.css";
 
 
 const Header = () => {

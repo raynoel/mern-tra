@@ -9,12 +9,12 @@ import {
 } from "../constants/productConstants"
 
 
-// Obtient la liste des produits de la DB et l'enregistre dans le store sous {productList: products}
-export const listProducts = (keyword = '') => async (dispatch) => {
+// Obtient la liste des produits de la DB et l'enregistre dans le store sous {productList: { products, page, pages }}
+export const listProducts = (keyword = '', pageNumber = '') => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST })
-    const { data } = await axios.get(`/api/products?keyword=${keyword}`)          // Obtient la liste de MongoDB
-    dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data })                       // enregistre la liste dans le store
+    const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`)  // Obtient { products, pageNumber, pages } de MongoDB
+    dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data })                       // enregistre { products, pageNumber, pages } dans le store
   } catch (error) {
     dispatch({ 
       type: PRODUCT_LIST_FAIL, 
