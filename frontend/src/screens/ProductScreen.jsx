@@ -20,9 +20,17 @@ const ProductScreen = ({ history, match }) => {                                 
   const { loading: loadingReviewCreate, error: errorReviewCreate, success: successReviewCreate } = useSelector((state) => state.productReviewCreate)
   
   
-  useEffect(() => {                                                       // obtient le produit quand la page load ou :id change
-    dispatch(getProductDetails(match.params.id))
-  }, [dispatch, match])
+  useEffect(() => {
+    if (successReviewCreate) { 
+      setRating(0) 
+      setComment('') 
+    }
+    if (!product._id || product._id !== match.params.id) {
+      dispatch(getProductDetails(match.params.id))
+      dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
+    }
+  }, [dispatch, match, successReviewCreate])
+
 
   const addToCartHandler = () => {
     history.push(`/cart/${match.params.id}?qty=${qty}`)

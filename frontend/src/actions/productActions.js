@@ -10,10 +10,10 @@ import {
 
 
 // Obtient la liste des produits de la DB et l'enregistre dans le store sous {productList: products}
-export const listProducts = () => async (dispatch) => {
+export const listProducts = (keyword = '') => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST })
-    const { data } = await axios.get('/api/products')                             // Obtient la liste de MongoDB
+    const { data } = await axios.get(`/api/products?keyword=${keyword}`)          // Obtient la liste de MongoDB
     dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data })                       // enregistre la liste dans le store
   } catch (error) {
     dispatch({ 

@@ -6,7 +6,13 @@ import Product from '../models/productModel.js'
 // @route     GET /api/products
 // @access    public
 const getProducts = asyncHandler(async (req, res) => {                // asyncHandler est un middleware qui catch les erreurs, on peut donc omettre try-catch
-  const products = await Product.find({})                             // Utilise la methode find() de l'obj Product construit par mongoose
+  const searchParams = req.query.keyword ? {                          // Obtient la valeur après ?keyword=
+    name: { 
+      $regex: req.query.keyword,
+      $options: 'i'
+     }
+  } : {}                                 
+  const products = await Product.find({ ...searchParams })            // Utilise la methode find() de mongoose
   res.json(products)
 })
 

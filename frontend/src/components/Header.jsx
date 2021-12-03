@@ -1,9 +1,10 @@
 import React from 'react'
+import { Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import SearchBox from './SearchBox.jsx';
 import { logout } from '../actions/userActions'
-import "font-awesome/css/font-awesome.css";
 
 
 const Header = () => {
@@ -20,6 +21,7 @@ const Header = () => {
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
+            <Route render={({ history }) => <SearchBox history={history} />} />
             <Nav className='ml-auto'>
               <LinkContainer to='/cart'><Nav.Link><i className='fa fa-shopping-cart'></i> Cart</Nav.Link></LinkContainer>
               {/* Si login, affiche le nom du visiteur + drop-d own qui affiche 'profile' & 'logout' */}
