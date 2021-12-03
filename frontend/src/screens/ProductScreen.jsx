@@ -5,6 +5,7 @@ import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 import Rating from '../components/Rating.jsx'
 import Loader from '../components/Loader.jsx'
 import Message from '../components/Message.jsx'
+import Meta from '../components/Meta.jsx'
 import { getProductDetails, createProductReview } from '../actions/productActions'
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
 
@@ -45,6 +46,7 @@ const ProductScreen = ({ history, match }) => {                                 
 
   return (
     <div>
+      <Meta title={product.name} />
       <Link className='btn btn-light my-3' to="/">Go Back</Link>
       { loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
         <>
