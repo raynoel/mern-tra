@@ -4,7 +4,7 @@ import thunk from 'redux-thunk'                                         // perme
 import { composeWithDevTools } from 'redux-devtools-extension'          // permet d'utiliser le devtool Redux dans Chrome
 import { cartReducer } from './reducers/cartReducers'
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer, userListReducer, userDeleteReducer, userUpdateReducer } from './reducers/userReducers'
-import { productListReducer, productDetailsReducer, productDeleteReducer, productCreateReducer, productUpdateReducer, productReviewCreateReducer } from './reducers/productReducers'
+import { productListReducer, productDetailsReducer, productDeleteReducer, productCreateReducer, productUpdateReducer, productReviewCreateReducer, productTopRatedReducer } from './reducers/productReducers'
 import { orderCreateReducer, orderDetailsReducer, orderPayReducer, orderListMyReducer, orderListReducer, orderDeliverReducer } from './reducers/orderReducers'
 
 const reducer = combineReducers({
@@ -14,6 +14,7 @@ const reducer = combineReducers({
   productUpdate:  productUpdateReducer,
   productDelete:  productDeleteReducer,
   productReviewCreate: productReviewCreateReducer,
+  productTopRated: productTopRatedReducer,
   cart:           cartReducer,
   userRegister:   userRegisterReducer,
   userLogin:      userLoginReducer,
