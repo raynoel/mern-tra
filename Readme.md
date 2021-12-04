@@ -1,5 +1,7 @@
-# Démarre le backend & frontend
->>> npm run dev
+# Démarre le backend & frontend à http://localhost:5000/
+# On utilise .env pour basculer entre NODE_ENV = production || development
+>>> npm start
+
 
 # Démarre le backend
 >>> npm run server 
