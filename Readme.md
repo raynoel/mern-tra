@@ -1,6 +1,6 @@
-# Démarre le backend & frontend à http://localhost:5000/
-# On utilise .env pour basculer entre NODE_ENV = production || development
+# Démarre le Backend & Frontend à http://localhost:5000/
 >>> npm start
+# On utilise .env pour basculer entre NODE_ENV = production || development
 
 
 # Démarre le backend
@@ -9,7 +9,8 @@
 # Démarre le frontend
 >>> npm run client
 
-
+# Démarre en development
+>>> npm run dev
 
 ##########################
 # Mongo DB
