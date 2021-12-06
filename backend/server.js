@@ -1,7 +1,7 @@
 import path from 'path'
 import express from 'express'
 import dotenv from 'dotenv'
-import connectDB from './config/db.js'
+import connectDatabase from './config/db.js'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
@@ -10,7 +10,7 @@ import uploadRoutes from './routes/uploadRoutes.js'
 
 dotenv.config();                                              // Active dotenv
 
-connectDB()                                                   // fct qui nous connecte à la DB mongoose
+connectDatabase()                                             // fct qui nous connecte à la DB mongoose
 const app = express();                                        // initialise express
 
 // Middleware
